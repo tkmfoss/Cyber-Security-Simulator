@@ -17,6 +17,7 @@ const navLinks = [
       { to: "/password-analyzer", label: "Password Analyzer" },
       { to: "/firewall", label: "Network Firewall" },
       { to: "/incident-investigation", label: "Incident Investigation" },
+      { to: "/web-security", label: "Web Security Lab" },
     ],
   },
   {
