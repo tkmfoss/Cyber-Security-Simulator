@@ -18,6 +18,7 @@ const navLinks = [
       { to: "/firewall", label: "Network Firewall" },
       { to: "/incident-investigation", label: "Incident Investigation" },
       { to: "/web-security", label: "Web Security Lab" },
+      { to: "/api-security", label: "API & Token Security" },
     ],
   },
   {
