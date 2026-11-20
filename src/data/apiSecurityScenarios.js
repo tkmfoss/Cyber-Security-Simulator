@@ -17,7 +17,7 @@ export const API_SECURITY_SCENARIOS = [
     summary:
       'Exploit an insecure API gateway that accepts the deprecated "none" algorithm, allowing privilege escalation from a standard user to system administrator without knowing the secret signing key.',
     initialToken:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEwNDIiLCJuYW1lIjoiQWxleCBWYW5jZSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjE3MDAwMDM2MDB9.d41d8cd98f00b204e9800998ecf8427e',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEwNDIiLCJuYW1lIjoiQWxleCBWYW5jZSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjE3MDAwMDM2MDB9.sig_b4bbdcfe40a925a0',
     initialSecret: 'super-secret-hmac-key',
     targetEndpoint: '/api/v1/admin/financial-records',
     targetObjective:
@@ -70,7 +70,7 @@ function verifyToken(token) {
     summary:
       'Crack a symmetric JWT signing key using dictionary brute-force against a weak secret, then forge a high-privilege token to invoke protected backend endpoints.',
     initialToken:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzIwOTEiLCJuYW1lIjoiTWFyayBTbG9hbiIsInJvbGUiOiJ2aWV3ZXIiLCJwZXJtaXNzaW9ucyI6WyJyZWFkOnByb2ZpbGUiXSwiaWF0IjoxNzAwMDAwMDAwfQ.sim_secret123_sig',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzIwOTEiLCJuYW1lIjoiTWFyayBTbG9hbiIsInJvbGUiOiJ2aWV3ZXIiLCJwZXJtaXNzaW9ucyI6WyJyZWFkOnByb2ZpbGUiXSwiaWF0IjoxNzAwMDAwMDAwfQ.sig_a4bd316d1ac6fea5',
     initialSecret: 'secret123',
     targetEndpoint: '/api/v1/management/system-audit',
     targetObjective:
@@ -114,7 +114,7 @@ app.post('/api/v1/auth/login', (req, res) => {
     summary:
       'Exploit an API service that verifies cryptographic signatures but neglects validating token expiration (`exp`), enabling indefinitely captured tokens to be replayed.',
     initialToken:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzUwMTIiLCJlbWFpbCI6ImV4ZWN1dGl2ZUBjb3JwLmxvY2FsIiwicm9sZSI6ImNmb19hZG1pbiIsImlhdCI6MTY5MDAwMDAwMCwiZXhwIjoxNjkwMDAzNjAwfQ.sim_securekey_sig',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzUwMTIiLCJlbWFpbCI6ImV4ZWN1dGl2ZUBjb3JwLmxvY2FsIiwicm9sZSI6ImNmb19hZG1pbiIsImlhdCI6MTY5MDAwMDAwMCwiZXhwIjoxNjkwMDAzNjAwfQ.sig_b259a645957d1303',
     initialSecret: 'high-entropy-secure-cluster-key-2026',
     targetEndpoint: '/api/v1/treasury/wire-transfer',
     targetObjective:

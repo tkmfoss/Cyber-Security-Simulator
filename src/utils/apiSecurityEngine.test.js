@@ -216,3 +216,30 @@ test('evaluateApiChallenge processes jwt_weak_secret and jwt_expired_replay', ()
   assert.equal(resReplayBlocked.statusCode, 401);
   assert.equal(resReplayBlocked.responseBody.error, 'TokenExpiredError');
 });
+
+test('API security scenarios have cryptographically valid initial tokens and crackable dictionary targets', async () => {
+  const { API_SECURITY_SCENARIOS, COMMON_WEAK_SECRETS } = await import('../data/apiSecurityScenarios.js');
+
+  // Verify jwt_alg_none
+  const noneScenario = API_SECURITY_SCENARIOS.find((s) => s.id === 'jwt_alg_none');
+  const noneVerify = verifyJwt(noneScenario.initialToken, noneScenario.initialSecret, { enforceExp: false });
+  assert.equal(noneVerify.valid, true);
+
+  // Verify jwt_weak_secret
+  const weakScenario = API_SECURITY_SCENARIOS.find((s) => s.id === 'jwt_weak_secret');
+  const weakVerify = verifyJwt(weakScenario.initialToken, weakScenario.initialSecret, { enforceExp: false });
+  assert.equal(weakVerify.valid, true);
+
+  // Verify jwt_expired_replay
+  const expiredScenario = API_SECURITY_SCENARIOS.find((s) => s.id === 'jwt_expired_replay');
+  const expiredVerify = verifyJwt(expiredScenario.initialToken, expiredScenario.initialSecret, { enforceExp: false });
+  assert.equal(expiredVerify.valid, true);
+
+  // Verify default cracker token
+  const defaultCrackerToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzIwOTEiLCJuYW1lIjoiTWFyayBTbG9hbiIsInJvbGUiOiJ2aWV3ZXIifQ.sig_c16601c6b447d25e';
+  const crack = crackHmacSecret(defaultCrackerToken, COMMON_WEAK_SECRETS);
+  assert.equal(crack.cracked, true);
+  assert.equal(crack.secret, 'secret123');
+});
+

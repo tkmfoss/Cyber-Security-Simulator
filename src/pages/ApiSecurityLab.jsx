@@ -20,6 +20,7 @@ import {
 import { SectionTitle } from '../components/SectionTitle';
 import { CyberCard } from '../components/CyberCard';
 import { AnimatedButton } from '../components/AnimatedButton';
+import { useTheme } from '../context/ThemeContext';
 import { API_SECURITY_SCENARIOS, COMMON_WEAK_SECRETS } from '../data/apiSecurityScenarios';
 import {
   base64UrlEncode,
@@ -34,10 +35,12 @@ import {
 } from '../utils/apiSecurityEngine';
 
 export const ApiSecurityLab = () => {
+  const { addXP } = useTheme();
   const [activeTab, setActiveTab] = useState('inspector'); // 'inspector' | 'challenges' | 'cracker'
   const [selectedScenarioId, setSelectedScenarioId] = useState('jwt_alg_none');
   const [defenseActive, setDefenseActive] = useState(false);
   const [challengeResult, setChallengeResult] = useState(null);
+  const [completedChallenges, setCompletedChallenges] = useState({});
   const [copied, setCopied] = useState(false);
 
   // Inspector State
@@ -60,7 +63,7 @@ export const ApiSecurityLab = () => {
 
   // Cracker State
   const [crackerToken, setCrackerToken] = useState(
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzIwOTEiLCJuYW1lIjoiTWFyayBTbG9hbiIsInJvbGUiOiJ2aWV3ZXIifQ.sig_3a5047b74400cf2b'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzIwOTEiLCJuYW1lIjoiTWFyayBTbG9hbiIsInJvbGUiOiJ2aWV3ZXIifQ.sig_c16601c6b447d25e'
   );
   const [crackResult, setCrackResult] = useState(null);
   const [entropyInputKey, setEntropyInputKey] = useState('secret123');
@@ -78,7 +81,7 @@ export const ApiSecurityLab = () => {
 
   // Verification in inspector
   const verificationResult = useMemo(
-    () => verifyJwt(tokenInput, currentSecret, { allowedAlgorithms: ['HS256', 'RS256'] }),
+    () => verifyJwt(tokenInput, currentSecret, { allowedAlgorithms: ['HS256', 'RS256'], enforceExp: false }),
     [tokenInput, currentSecret]
   );
 
@@ -160,6 +163,13 @@ export const ApiSecurityLab = () => {
       secret: currentScenario.initialSecret,
     });
     setChallengeResult(res);
+
+    if (res.passed && !completedChallenges[selectedScenarioId]) {
+      if (typeof addXP === 'function') {
+        addXP(50);
+      }
+      setCompletedChallenges((prev) => ({ ...prev, [selectedScenarioId]: true }));
+    }
   };
 
   // Run offline dictionary cracker
